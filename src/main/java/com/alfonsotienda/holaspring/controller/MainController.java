@@ -1,9 +1,15 @@
 package com.alfonsotienda.holaspring.controller;
 
-import com.fasterxml.jackson.annotation.JsonCreator.Mode;
+import javax.persistence.EntityManager;
 
-import org.aspectj.apache.bcel.classfile.Module.Require;
+import com.alfonsotienda.holaspring.model.Cliente;
+import com.alfonsotienda.holaspring.model.ClienteRepository;
+import com.alfonsotienda.holaspring.model.Factura;
+import com.alfonsotienda.holaspring.model.FacturaRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +25,77 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class MainController {
 
+    @Autowired
+    FacturaRepository facturaRepository;
+
+    @Autowired
+    ClienteRepository clienteRepository;
+
     @GetMapping("/")
     @ResponseBody
     public String holaMundo(@RequestParam("nombre") String name, @RequestParam("edad") Integer edad) {
         return "Hola " + name + " tienes " + edad + "años";
     }
+
+
+
+
+
+
+
+    @GetMapping("/creafactura")
+    @ResponseBody
+    public ResponseEntity creaFactura(
+            @RequestParam("fecha") String fecha,
+            @RequestParam("id") Integer id,
+            @RequestParam("total") Double total
+            ) {
+                Factura factura = new Factura();
+                factura.setFecha(fecha);
+                factura.setId(id);
+                factura.setTotal(total);
+                facturaRepository.save(factura);
+                
+                ResponseEntity responseEntity = 
+                    new ResponseEntity<>(HttpStatus.CREATED);
+                return responseEntity;
+    }
+
+    @GetMapping("/cliente")
+    @ResponseBody
+    public ModelAndView creaCliente() {
+
+        ModelAndView modelAndView=new ModelAndView("cliente");
+        modelAndView.addObject("mensaje", "");
+        return modelAndView;
+    }
+
+    @PostMapping("/cliente")
+    public ModelAndView clientePost(
+        @RequestParam("nombre") String nombre,
+        @RequestParam("apellido") String apellido,
+        @RequestParam("edad") Integer edad
+    ){
+        ModelAndView modelAndView=new ModelAndView("cliente");
+        Cliente cliente=new Cliente(nombre, apellido, edad);
+        clienteRepository.save(cliente);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/lista")
+    public ModelAndView showListaClientes(){
+        ModelAndView modelAndView = new ModelAndView("listaCli");
+        Iterable<Cliente> todosLosClientes = clienteRepository.findAll();
+
+        String todos = "";
+        for (Cliente cliente : todosLosClientes) {
+            todos = todos + cliente.getNombre()+ ", ";
+        }
+        modelAndView.addObject("clientes", todosLosClientes);
+        modelAndView.addObject("todos", todos);
+        return modelAndView;
+    }   
 
     @GetMapping("/ingles")
     @ResponseBody
