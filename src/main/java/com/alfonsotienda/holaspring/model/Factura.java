@@ -1,9 +1,14 @@
 package com.alfonsotienda.holaspring.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 
 /**
@@ -20,10 +25,17 @@ public class Factura {
 
     private Double total;
 
+    @ManyToOne
+    private Cliente Cliente;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    
+    private Set<Clientes> Clientes;
+
     public Integer getId() {
         return id;
     }
-
+    
     public void setId(Integer id) {
         this.id = id;
     }

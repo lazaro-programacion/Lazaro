@@ -2,22 +2,20 @@ package com.alfonsotienda.holaspring.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * clientes
+ */
 @Entity
-@Table(name = "cliente")
-public class Cliente {
+public class Clientes {
 
     @Id // pk no nula
     @GeneratedValue(strategy = GenerationType.AUTO) // auto increment
@@ -32,26 +30,11 @@ public class Cliente {
     private String apellido;
 
     @NotNull
-    @Min(value = 16) // limita edad a más de 15
-    @Max(value = 65) // y menos de 65 saltará error 500
-    private Integer edad;
-
-    @OneToMany(mappedBy = "Cliente", cascade = CascadeType.ALL)
-    private Set<Factura> cliente;
-
-
     
-    public Cliente() {
-    }
+    @ManyToMany(mappedBy = "Clientes")
+    private Set<Factura> Clientes;
 
-    public Cliente(@NotNull String nombre, 
-                    @NotNull String apellido, 
-                    @NotNull @Min(16) @Max(65) Integer edad) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.edad = edad;
-    }
-
+    private Integer edad;
 
 
     public Integer getId() {
@@ -85,12 +68,4 @@ public class Cliente {
     public void setEdad(Integer edad) {
         this.edad = edad;
     }
-
-    @Override
-    public String toString() {
-        return "Cliente [apellido=" + apellido + ", edad=" + edad + ", id=" + id + ", nombre=" + nombre + "]";
-    }
-
-
-
 }

@@ -1,7 +1,5 @@
 package com.alfonsotienda.holaspring.controller;
 
-import javax.persistence.EntityManager;
-
 import com.alfonsotienda.holaspring.model.Cliente;
 import com.alfonsotienda.holaspring.model.ClienteRepository;
 import com.alfonsotienda.holaspring.model.Factura;
@@ -72,6 +70,28 @@ public class MainController {
 
     @PostMapping("/cliente")
     public ModelAndView clientePost(
+        @RequestParam("nombre") String nombre,
+        @RequestParam("apellido") String apellido,
+        @RequestParam("edad") Integer edad
+    ){
+        ModelAndView modelAndView=new ModelAndView("cliente");
+        Cliente cliente=new Cliente(nombre, apellido, edad);
+        clienteRepository.save(cliente);
+
+        return modelAndView;
+    }
+
+    @GetMapping("/clientes")
+    @ResponseBody
+    public ModelAndView creaClientes() {
+
+        ModelAndView modelAndView=new ModelAndView("cliente");
+        modelAndView.addObject("mensaje", "");
+        return modelAndView;
+    }
+
+    @PostMapping("/clientes")
+    public ModelAndView clientesPost(
         @RequestParam("nombre") String nombre,
         @RequestParam("apellido") String apellido,
         @RequestParam("edad") Integer edad
