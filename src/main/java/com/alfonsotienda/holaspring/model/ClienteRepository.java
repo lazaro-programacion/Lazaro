@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ClienteRepository extends CrudRepository<Cliente, Integer>{
 
- //   Iterable<Cliente> findByName(String name);
+ //   Iterable<Cliente> findByName(String name);   
     
 }
