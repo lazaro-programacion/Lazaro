@@ -32,7 +32,7 @@ public class Clientes {
     @NotNull
     
     @ManyToMany(mappedBy = "Clientes")
-    private Set<Factura> Clientes;
+    private Set<Factura> Facturas;
 
     private Integer edad;
 
